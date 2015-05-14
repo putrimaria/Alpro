@@ -1,0 +1,120 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package pancake;
+import java.util.Scanner;
+
+class Solve {
+    
+    int[] tumpukan;
+    
+    public int[] Solve(int [] stack){
+        tumpukan = stack;
+        int awal = 0;
+        int next = tumpukan.length - 1;
+        int[] flips = new int[30];
+        
+        if(isSorted()) { //ketika tumpukan sudah terurut
+            System.out.println("====================");
+            for (int i = 0; i < tumpukan.length; i++) {
+                
+                System.out.println("["+ tumpukan[i] +"]");
+            }
+            System.out.println("Tumpukan sudah terurut.");
+        }
+        if(!isSorted()) {
+            System.out.println("Tumpukan Anda akan diurutkan: ");
+            for(int i = 0; i < tumpukan.length; i++) {
+                System.out.println("[" + tumpukan[i] + "]");
+            }
+            System.out.println("======================");
+        }
+        while(!isSorted()) { //ketika tumpukan belum tersort
+            int largest = 0;
+            int largestIndex = 0;
+            for(int i = next; i >= 0; i--){
+                if(tumpukan[i] > largest){
+                    largest = tumpukan[i];
+                    largestIndex = i;
+                }
+            }
+            if(largestIndex != 0){
+                flip(largestIndex);
+                flips[awal] = (tumpukan.length - largestIndex);
+                awal++;
+            }
+          
+            if(!isSorted()){
+                flip(next);
+                flips[awal] = tumpukan.length - next;
+                awal++;
+                next--;
+            }
+            
+            }
+        return flips;
+        }
+        
+    
+    public boolean isSorted(){
+        boolean sorted = true;
+        for(int i = 1; i < tumpukan.length; i++){
+            if(tumpukan[i-1] > tumpukan[i]){
+                sorted = false;
+            }
+        }
+        return sorted;
+    }
+    
+    public void flip(int index){
+        int[] holder = new int[index + 1];
+        System.out.println("flip(" + index + ")");
+        for(int i = 0; i < holder.length; i++){
+            holder[i] = tumpukan[i];
+        }
+        for(int i = 0; i < holder.length; i++){
+            tumpukan[holder.length - i -1] = holder[i];
+        }
+        for(int i = 0; i < tumpukan.length; i++) {
+            System.out.println("[" + tumpukan[i] + "]");    
+        }
+        System.out.println("=====================");
+    }
+
+    public static void main(String[] args) {
+        Solve m=new Solve();
+        Scanner input = new Scanner(System.in);
+        int [] stack;
+        System.out.println("Masukan jumlah tumpukan: ");
+        int a = input.nextInt();
+        stack = new int [a]; 
+        for (int i = 0; i < stack.length; i++) {
+            System.out.println("Masukan diameter pancake ke" + (i+1) + ": ");
+            int b = input.nextInt();
+            stack[i] = b;
+        }
+        m.Solve(stack);
+        
+        /*while(input.hasNextLine()){
+            int[] flips;
+            String newStack = "";
+            String oldStack = input.nextLine();
+            String[] temp = oldStack.split(" ");
+            int[] stack = new int[temp.length];
+            for(int i = 0; i < temp.length; i++){
+                stack[i] = Integer.parseInt(temp[i]);
+            }
+            flips = m.Solve(stack);
+            System.out.println("" + oldStack);
+                for(int i = 0; flips[i] != 0 && i < flips.length; i++){
+                    newStack += flips[i] + " ";
+                }
+            newStack += 0;
+            System.out.println("" + newStack);
+        
+                }*/
+    }
+    
+} 
